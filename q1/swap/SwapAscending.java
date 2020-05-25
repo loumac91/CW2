@@ -2,7 +2,7 @@ package q1.swap;
 
 public class SwapAscending extends SwapBase {
 
-  public <T> Boolean shouldSwap(T a, T b) {
+  public Boolean shouldSwap(String a, String b) {
     return collator.compare(a, b) > 0;
   }
 }
