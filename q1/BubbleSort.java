@@ -6,16 +6,16 @@ import q1.swap.SwapDescending;
 
 public class BubbleSort {
   
-  public static String[] sort(String[] stringArray) {
-    return sort(stringArray, new SwapAscending<String>());
+  public static <T> T[] sort(T[] stringArray) {
+    return sort(stringArray, new SwapAscending());
   }
 
-  public static String[] sort(String[] stringArray, SortOrder sortOrder) {
+  public static <T> T[] sort(T[] stringArray, SortOrder sortOrder) {
     switch (sortOrder) {
       case DESCENDING: 
-        return sort(stringArray, new SwapDescending<String>());
+        return sort(stringArray, new SwapDescending());
       default:
-        return sort(stringArray, new SwapAscending<String>());
+        return sort(stringArray, new SwapAscending());
     }
   }
 
@@ -28,22 +28,22 @@ public class BubbleSort {
 
   // each iteration of the outer loop, guarantees that one value will reach its sorted state at the end of the array
   // this is because a comparison pass is made for that value agaisnt every other value int he array 
-  private static String[] sort(String[] stringArray, SwapBase<String> swapper) {
-    for (int i = 0; i < stringArray.length - 1; i++) { // < rather than <= because we will access + 1
-      for (int j = 0; j < stringArray.length - 1 - i; j++) {
-        String a = stringArray[j];
-        String b = stringArray[j + 1];
+  private static <T> T[] sort(T[] array, SwapBase swapper) {
+    for (int i = 0; i < array.length - 1; i++) { // < rather than <= because we will access + 1
+      for (int j = 0; j < array.length - 1 - i; j++) {
+        T a = array[j];
+        T b = array[j + 1];
         if (swapper.shouldSwap(a, b)) {
-          swapper.swap(stringArray, j, a, b);
+          swapper.swap(array, j, a, b);
         }
 
-        for (String string : stringArray) {
-          System.out.print(string + ", ");
+        for (T string : array) {
+          System.out.print(string.toString() + ", ");
         }
         System.out.println();
       }
     }
 
-    return stringArray;
+    return array;
   }
 }
