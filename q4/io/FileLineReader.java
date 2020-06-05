@@ -1,4 +1,4 @@
-package q4;
+package q4.io;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

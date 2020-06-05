@@ -1,4 +1,4 @@
-package q4;
+package q4.redaction;
 
 public class RedactionCandidate extends Redaction {
 
