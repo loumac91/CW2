@@ -15,6 +15,9 @@ public class CW2Q4 {
     TextRedactor textRedactor = new TextRedactor();
     
     try {
+
+      // You can search through output with ([A-Z]{1}[a-z]+) regular expression
+      // to capitalised words that were not redacted
       
       RedactionResult redactionResult = textRedactor.redactText(Strings.WAR_AND_PIECE_FULL_FILEPATH, Strings.OUTPUT_FULL_FILEPATH);
 

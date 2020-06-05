@@ -66,7 +66,7 @@ public class TextRedactionReader {
                   redactionsMap.put(word, redactions);
                 } else {
                   String key = StringBuilderUtils.toLowerCaseString(wordBuilder);
-                  LinkedHashSet<RedactionCandidate> redactionCandidates = candidatesMap.getOrDefault(word, new LinkedHashSet<RedactionCandidate>());
+                  LinkedHashSet<RedactionCandidate> redactionCandidates = candidatesMap.getOrDefault(key, new LinkedHashSet<RedactionCandidate>());
                   redactionCandidates.add(new RedactionCandidate(word, lineNumber, captureStart, lineIndex));
                   candidatesMap.put(key, redactionCandidates);
                 } 
@@ -95,7 +95,7 @@ public class TextRedactionReader {
                 redactionsMap.put(word, redactions);
               } else {
                 String key = StringBuilderUtils.toLowerCaseString(wordBuilder);
-                LinkedHashSet<RedactionCandidate> redactionCandidates = candidatesMap.getOrDefault(word, new LinkedHashSet<RedactionCandidate>());
+                LinkedHashSet<RedactionCandidate> redactionCandidates = candidatesMap.getOrDefault(key, new LinkedHashSet<RedactionCandidate>());
                 redactionCandidates.add(new RedactionCandidate(word, lineNumber, captureStart, lineIndex));
                 candidatesMap.put(key, redactionCandidates);
               } 
