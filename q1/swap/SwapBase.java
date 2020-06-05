@@ -1,10 +1,14 @@
 package q1.swap;
 
-import java.text.Collator;
+import java.util.Comparator;
+
+import q1.StringComparator;
+
+// Added so that the should swap could have different implementations
 
 public abstract class SwapBase {
   
-  protected static final Collator collator = Collator.getInstance();
+  protected static final Comparator<String> stringComparator = new StringComparator();
 
   public abstract Boolean shouldSwap(String a, String b);
 
