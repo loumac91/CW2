@@ -24,11 +24,11 @@ public class TextRedactionReader {
     try (FileLineReader fileLineReader = new FileLineReader(new FileInputStream(new File(inputAbsolutePath)))) {
       
       int lineNumber = 1;
+      StringBuilder wordBuilder = new StringBuilder();
       while (fileLineReader.hasNext()) {
         String line = fileLineReader.next();
         lines.add(line);
 
-        StringBuilder wordBuilder = new StringBuilder();
         Boolean capturingLower = false, capturingUpper = false;
         int lineIndex = 0, lineLength = line.length(), captureStart = -1;
         while (lineIndex < lineLength) {
@@ -54,7 +54,7 @@ public class TextRedactionReader {
                 captureStart = lineIndex;
               }
             }
-          } else if ((Character.isWhitespace(character) && (capturingUpper || capturingLower)) || (capturingUpper || capturingLower)) {
+          } else if ((Character.isWhitespace(character) && (capturingUpper || capturingLower)) || (capturingUpper || capturingLower)) { // If whitespace or any other character, capture word
 
             String word = wordBuilder.toString();
             if (word.length() > 1) {
@@ -127,12 +127,6 @@ public class TextRedactionReader {
     );    
   }
 
-  // could be
-  // {Start of sentence}[A-Z] and above line blank
-  // “[A-Z]
-  // . [A-Z] - in cases of ellipsis, there is inconsistent rulings, so they cannot be definitive
-  // ? [A-Z]
-  // ! [A-Z]
   private Boolean isPreceededByWord(String line, int captureIndex) {
 
     String preceedingText = line.substring(0, captureIndex);
@@ -141,7 +135,7 @@ public class TextRedactionReader {
     int length = preceedingText.length();
     char preceedingCharacter = preceedingText.charAt(length - 1);
     if (Character.isWhitespace(preceedingCharacter)) {
-      return Character.isLetterOrDigit(preceedingText.charAt(length - 2));
+      return Character.isLetter(preceedingText.charAt(length - 2));
     }
     
     return false;

@@ -40,7 +40,10 @@ public class FileLineReader implements Iterator<String>, AutoCloseable {
       this.currentLine = line;
       return true;
     } catch (IOException ioException) {
-      // TODO CLOSE READer
+      try {
+        this.close();
+      } catch (Exception e) { }
+
       ioException.printStackTrace();
       
       return false;
