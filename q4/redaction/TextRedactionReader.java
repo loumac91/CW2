@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
 import q4.io.FileLineReader;
+import q4.util.CharUtils;
 import q4.util.StringBuilderUtils;
 
 public class TextRedactionReader {
@@ -145,9 +146,10 @@ public class TextRedactionReader {
     if (preceedingText.length() < 2) return false;
 
     int length = preceedingText.length();
-    char preceedingCharacter = preceedingText.charAt(length - 1);
-    if (Character.isWhitespace(preceedingCharacter)) {
-      return Character.isLetter(preceedingText.charAt(length - 2));
+    if (Character.isWhitespace(preceedingText.charAt(length - 1))) {
+      char preceedingCharacter = preceedingText.charAt(length - 2);
+      return Character.isLetterOrDigit(preceedingCharacter) 
+        || CharUtils.isCommaColonOrSemiColon(preceedingCharacter);
     }
     
     return false;

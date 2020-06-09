@@ -9,4 +9,10 @@ public class CharUtils {
   public static char toUpperCase(char c) {
     return (char) (c & 65503);
   }
+
+  public static Boolean isCommaColonOrSemiColon(char c) {
+    return c == ',' 
+      || c == ':' 
+      || c == ';';
+  }
 }
