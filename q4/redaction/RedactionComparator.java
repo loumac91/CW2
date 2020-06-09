@@ -2,6 +2,8 @@ package q4.redaction;
 
 import java.util.Comparator;
 
+// Will ensure ascending by line number (then line start index) order
+
 public class RedactionComparator implements Comparator<Redaction> {
 
   @Override

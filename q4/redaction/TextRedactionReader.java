@@ -25,15 +25,23 @@ public class TextRedactionReader {
       
       int lineNumber = 1;
       StringBuilder wordBuilder = new StringBuilder();
+
+      // 1. Iterate through each line 
+
       while (fileLineReader.hasNext()) {
         String line = fileLineReader.next();
         lines.add(line);
 
         Boolean capturingLower = false, capturingUpper = false;
         int lineIndex = 0, lineLength = line.length(), captureStart = -1;
+
+        // 2. Iterate through each character
+
         while (lineIndex < lineLength) {
           char character = line.charAt(lineIndex);
 
+
+          // 3, If is letter, then begin capture (either by upper or lower case)
           if (Character.isLetter(character)) {
             if (Character.isUpperCase(character)) {
               // Ignore consecutive capitals (somewhat opinionated)
@@ -54,7 +62,9 @@ public class TextRedactionReader {
                 captureStart = lineIndex;
               }
             }
-          } else if ((Character.isWhitespace(character) && (capturingUpper || capturingLower)) || (capturingUpper || capturingLower)) { // If whitespace or any other character, capture word
+
+            // 4. If whitespace or any other character, capture word
+          } else if ((Character.isWhitespace(character) && (capturingUpper || capturingLower)) || (capturingUpper || capturingLower)) { 
 
             String word = wordBuilder.toString();
             if (word.length() > 1) {
@@ -108,6 +118,7 @@ public class TextRedactionReader {
           capturingLower = false;          
         }
         
+        // 5. When finished reading line, reset capture index and stringbuilder
         captureStart = -1;
         StringBuilderUtils.reset(wordBuilder);
         lineNumber++;
@@ -127,6 +138,7 @@ public class TextRedactionReader {
     );    
   }
 
+  // This function checks to see whether an index in a line is proceeded first by whitespace, then by a letter
   private Boolean isPreceededByWord(String line, int captureIndex) {
 
     String preceedingText = line.substring(0, captureIndex);

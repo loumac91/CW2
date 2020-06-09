@@ -37,7 +37,7 @@ public class TextRedactor {
     // 2. Combine and sort the redactions
     // Don't redact any word that appears in lower case throughout document
     Instant sortTimeStart = Instant.now();
-    ArrayList<Redaction> sortedRedactions = sortCombinedRedactions(redactionReadResult);    
+    ArrayList<Redaction> sortedRedactions = getSortedRedactions(redactionReadResult);    
 
     Duration sortTime = Duration.between(sortTimeStart, Instant.now());
 
@@ -58,13 +58,17 @@ public class TextRedactor {
     );
   }
 
-  private ArrayList<Redaction> sortCombinedRedactions(RedactionReadResult redactionReadResult) {
+  // This function will return a single list of all the redactions to make on the output file
+  // (ordered by occurrence in input file)
+  private ArrayList<Redaction> getSortedRedactions(RedactionReadResult redactionReadResult) {
 
+    // Remove any candidate for redaction that has a lower case occurrence in input file 
     LinkedHashMap<String, LinkedHashSet<RedactionCandidate>> candidatesMap = redactionReadResult.getCandidateMap();
-    for (String uniqueWord : redactionReadResult.getUniqueWords()) {
+    for (String uniqueWord : redactionReadResult.getUniqueLowerCaseWords()) {
       candidatesMap.remove(uniqueWord);
     }
 
+    // Everything that is left is a proper noun, add them to redactions map
     LinkedHashMap<String, LinkedHashSet<Redaction>> redactionMap = redactionReadResult.getRedactionMap();
     for (String candidateKey : candidatesMap.keySet()) {
       String normalizedKey = StringUtils.capitalise(candidateKey);
@@ -73,10 +77,11 @@ public class TextRedactor {
       redactionMap.put(normalizedKey, redactions);
     }
 
+    // Transform redaction map into ArrayList<Redaction>
     return redactionMap
       .values() // Get the values
       .stream() // Convert to stream
-      .flatMap(LinkedHashSet<Redaction>::stream) // Flatten structure to single LinkedHashSet
+      .flatMap(LinkedHashSet<Redaction>::stream) // Flatten structure to single collection of Redactions
       .sorted(new RedactionComparator()) // Sort with custom comparator
       .collect(Collectors.toCollection(ArrayList::new)); // And return as ArrayList
   }

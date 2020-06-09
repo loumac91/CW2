@@ -8,6 +8,9 @@ import java.util.Iterator;
 
 import q4.util.StringUtils;
 
+// Class wraps BufferedReader to easily read/iterate through a file
+// AutoCloseable is used to ensure file is automatically disposed of when no longer is used
+
 public class FileLineReader implements Iterator<String>, AutoCloseable {
 
   private final String DEFAULT_CHARACTER_SET = "UTF-8";
@@ -17,7 +20,7 @@ public class FileLineReader implements Iterator<String>, AutoCloseable {
   private Boolean endOfFile = false;
 
   public FileLineReader(FileInputStream fileInputStream) throws IOException {
-    this.bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream, DEFAULT_CHARACTER_SET));
+    this.bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream, this.DEFAULT_CHARACTER_SET));
   }
 
   @Override
@@ -32,11 +35,12 @@ public class FileLineReader implements Iterator<String>, AutoCloseable {
 
     try {
       String line = this.bufferedReader.readLine();
-      if (StringUtils.isNull(line)) {
+      if (StringUtils.isNull(line)) { // null string here means end of file
         this.endOfFile = true;
-        return false; // or throw exception?
+        return false;
       }
 
+      // Cache the read line
       this.currentLine = line;
       return true;
     } catch (IOException ioException) {
@@ -54,6 +58,7 @@ public class FileLineReader implements Iterator<String>, AutoCloseable {
   public String next() {
     if (!hasNext()) return null;
 
+    // Read cached line, reset cache and return previous cache value
     String result = this.currentLine;
     this.currentLine = null;
     return result;

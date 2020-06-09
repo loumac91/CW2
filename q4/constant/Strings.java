@@ -18,5 +18,6 @@ public class Strings {
   public static final String WITH_LINE_SEPARATOR_FORMAT = "%s%s";
   public static final String TOTAL_REDACTIONS_FORMAT = "%d - words redacted";
   public static final String TOTAL_NUMBER_OF_LINES_FORMAT = "%d - lines read";
-  public static final String TOTAL_UNIQUE_NUMBER_OF_WORDS_FORMAT = "%d - unique words read";
+  public static final String TOTAL_NUMBER_OF_UNIQUE_LOWER_CASE_WORDS_FORMAT = "%d - unique lower case words read";
+  public static final String FILE_LOCATION_FORMAT = "%s can be found here: %s";
 }

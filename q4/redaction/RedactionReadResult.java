@@ -7,25 +7,25 @@ import java.util.LinkedHashSet;
 
 public class RedactionReadResult {
   
-  private final HashSet<String> uniqueWords;
+  private final HashSet<String> uniqueLowerCaseWords;
   private final LinkedHashMap<String, LinkedHashSet<RedactionCandidate>> candidatesMap;
   private final LinkedHashMap<String, LinkedHashSet<Redaction>> redactionsMap;
   private final ArrayList<String> allLines;
 
   public RedactionReadResult(
-    HashSet<String> uniqueWords,
+    HashSet<String> uniqueLowerCaseWords,
     LinkedHashMap<String, LinkedHashSet<RedactionCandidate>> candidatesMap,
     LinkedHashMap<String, LinkedHashSet<Redaction>> redactionsMap,
     ArrayList<String> allLines
   ) {
-    this.uniqueWords = uniqueWords;
+    this.uniqueLowerCaseWords = uniqueLowerCaseWords;
     this.candidatesMap = candidatesMap;
     this.redactionsMap = redactionsMap;
     this.allLines = allLines;
   }
 
-  public HashSet<String> getUniqueWords() {
-    return this.uniqueWords;
+  public HashSet<String> getUniqueLowerCaseWords() {
+    return this.uniqueLowerCaseWords;
   }
 
   public LinkedHashMap<String, LinkedHashSet<RedactionCandidate>> getCandidateMap() {

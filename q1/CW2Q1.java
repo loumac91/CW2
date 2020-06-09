@@ -2,11 +2,11 @@ package q1;
 
 public class CW2Q1 {
 
+  // Q1. Implement a bubble sort algorithm for a list of names in Java.
+  // e.g ["Michael", "Zack", "Rachid"] becomes ["Michael", "Rachid", "Zack"]
+
   public static void main(String[] args) {
     
-    // Q1. Implement a bubble sort algorithm for a list of names in Java.
-    // e.g ["Michael", "Zack", "Rachid"] becomes ["Michael", "Rachid", "Zack"]
-
     printExampleFromSpecification();
 
     printAlreadySorted();

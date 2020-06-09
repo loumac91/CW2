@@ -31,8 +31,12 @@ public class StringFormatter {
     return baseFormat(Strings.TOTAL_NUMBER_OF_LINES_FORMAT, numberOfLines);
   }
 
-  public static String formatNumberOfUniqueWords(int numberOfUniqueWords) {
-    return baseFormat(Strings.TOTAL_UNIQUE_NUMBER_OF_WORDS_FORMAT, numberOfUniqueWords);
+  public static String formatNumberOfUniqueLowerCaseWords(int numberOfUniqueWords) {
+    return baseFormat(Strings.TOTAL_NUMBER_OF_UNIQUE_LOWER_CASE_WORDS_FORMAT, numberOfUniqueWords);
+  }
+
+  public static String formatFileLocation(String fileName, String filePath) {
+    return baseFormat(Strings.FILE_LOCATION_FORMAT, fileName, filePath);
   }
 
   private static String baseFormat(String format, Object... args) {

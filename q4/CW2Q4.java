@@ -10,6 +10,10 @@ import q4.redaction.TextRedactor;
 
 public class CW2Q4 {
 
+  // Q4. Implement in Java that from a given block of text redacts all proper nouns
+  // (i.e. a name used for an individual person, place, or organisation, spelled with
+  // an initial capital letter).
+
   public static void main(String[] args) {
 
     TextRedactor textRedactor = new TextRedactor();
@@ -24,7 +28,7 @@ public class CW2Q4 {
       System.out.println("REDACTION RESULTS:");
       System.out.println(StringFormatter.formatTotalRedactions(redactionResult.getTotalRedactions()));
       System.out.println(StringFormatter.formatTotalNumberOfLines(redactionResult.getRedactionReadResult().getAllLines().size()));
-      System.out.println(StringFormatter.formatNumberOfUniqueWords(redactionResult.getRedactionReadResult().getUniqueWords().size()));
+      System.out.println(StringFormatter.formatNumberOfUniqueLowerCaseWords(redactionResult.getRedactionReadResult().getUniqueLowerCaseWords().size()));
       System.out.println();
 
       System.out.println(StringFormatter.formatTimeElapsedForAction("overall redaction process"));
@@ -41,6 +45,9 @@ public class CW2Q4 {
 
       System.out.println(StringFormatter.formatTimeElapsedForAction("writing redactions"));
       System.out.println(StringFormatter.formatDurationToSeconds(redactionResult.getElapsedWriteTime()));
+      System.out.println();
+
+      System.out.println(StringFormatter.formatFileLocation("Output file", Strings.OUTPUT_FULL_FILEPATH));
 
     } catch (FileNotFoundException fileNotFoundException) {
       StringFormatter.formatException(fileNotFoundException);
