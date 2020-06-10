@@ -1,15 +1,16 @@
 package q4.constant;
 
+import java.nio.file.FileSystems;
+
 public class Strings {
   
   // FILES
+  public static final String FILE_SEPARATOR = FileSystems.getDefault().getSeparator();
   public static final String USER_DIRECTORY = System.getProperty("user.dir");
-  public static final String WAR_AND_PIECE_RELATIVE_FILEPATH = "\\q4\\warandpeace.txt";
+  public static final String WAR_AND_PIECE_RELATIVE_FILEPATH = FILE_SEPARATOR + "q4" + FILE_SEPARATOR + "warandpeace.txt";
   public static final String WAR_AND_PIECE_FULL_FILEPATH = USER_DIRECTORY + WAR_AND_PIECE_RELATIVE_FILEPATH;
-  public static final String OUTPUT_RELATIVE_FILEPATH = "\\q4\\output.txt";
+  public static final String OUTPUT_RELATIVE_FILEPATH = FILE_SEPARATOR + "q4" + FILE_SEPARATOR + "output.txt";
   public static final String OUTPUT_FULL_FILEPATH = USER_DIRECTORY + OUTPUT_RELATIVE_FILEPATH;
-  public static final String TEST_SAMPLE_RELATIVE_FILEPATH = "\\q4\\small.txt";
-  public static final String TEST_SAMPLE_FULL_FILEPATH = USER_DIRECTORY + TEST_SAMPLE_RELATIVE_FILEPATH;
 
   // PRINT STATEMENTS
   public static final String EXCEPTION_FORMAT = "Exception {%s}: \"%s\"";

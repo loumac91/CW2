@@ -1,4 +1,4 @@
-package q1;
+import q1.BubbleSort;
 
 public class CW2Q1 {
 
