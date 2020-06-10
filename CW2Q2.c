@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "quick_sort.h"
+#include "q2/quick_sort.h"
 
 void print_array(char *print_statement, int *array_pointer, int length) 
 {
