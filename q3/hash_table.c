@@ -5,7 +5,7 @@
 #include "hashing.h";
 
 // STATIC FUNCTIONS
-// These are internal to this file
+// These are internal to this file (can only be called from within file), hence static 
 
 static int get_hash_index(const char* key, const int hash_table_size, const int attempt) {
   int result = get_hashed_key(key) % hash_table_size;
@@ -39,7 +39,7 @@ hash_table* create_hash_table(const int table_size) {
   ht -> size = table_size;
   ht -> count = 0;
   // Set kvp array to be (table_size) elements long with each element being key_value_pair* bytes in size
-  // the case to size_t in order to mimic call of sizeof function (which has a return type of size_t)
+  // the cast to size_t in order to mimic call of sizeof function (which has a return type of size_t)
   ht -> key_value_pairs = calloc((size_t)ht -> size, sizeof(key_value_pair*));
 
   return ht;
@@ -48,7 +48,7 @@ hash_table* create_hash_table(const int table_size) {
 void delete_hash_table(hash_table* ht) {
   for (int i = 0; i < ht -> size; i++) {
     key_value_pair* kvp = ht -> key_value_pairs[i];
-    if (kvp != NULL && kvp != &DELETED_KEY_VALUE_PAIR) {
+    if (kvp != NULL && kvp != &DELETED_KEY_VALUE_PAIR) { // TODO WHAT DOES & do? point to address?
       delete_key_value_pair(kvp);
     }
   }

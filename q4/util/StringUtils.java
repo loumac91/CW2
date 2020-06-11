@@ -22,6 +22,7 @@ public class StringUtils {
   }
 
   public static String repeat(String s, int repeatCount) {
+    // TODO use stringbuilder and for loop
     return String.join("", Collections.nCopies(repeatCount, s));
   }
 }
