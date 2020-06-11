@@ -12,7 +12,8 @@ gcc CW2Q2.c ./q2/quick_sort.c -o CW2Q2.exe
 ./CW2Q2.exe
 
 Q3: Compile and Run:
-
+gcc CW2Q3.c ./q3/hash_table.c ./q3/hashing.c -o CW2Q2.exe
+./CW2Q3.exe
 
 Q4: Run:
 java CW2Q4
