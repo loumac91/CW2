@@ -19,5 +19,8 @@ Q4: Run:
 java CW2Q4
 
 Q5: Compile and Run:
+gcc CW2Q5.c q5/cipher_transposition.c -o main.exe
 
+TODO - READ THE NAMES FILE FOR Q1
+finish q3
 
