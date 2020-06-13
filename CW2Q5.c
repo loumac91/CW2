@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <stddef.h>
 
 #include "q5/cipher_transposition.h"
 
@@ -37,69 +35,90 @@ static int get_string_length(char* s) {
 // And shift from original index to new (sorted) index
 // And write to file
 
-int main() {
-  // char cipher_key[] = "KEYS";
-  // const char* input_filepath = "./q5/small.txt";
+// In the following code, whitespace and new lines have been preserved in the output file.
+// This was done so that it should be possible to decrypt the file back to it's original state
+// by simply shifting the indexes of the file back into their correct position
+
+int main(int argc, char const *argv[]) {
 
   char cipher_key[] = "LOVELACE";
   const char* input_filepath = "./q5/text.txt";
   const char* output_filepath = "./q5/output.txt";
 
-  printf("Using key: '%s' ", cipher_key);
-  printf("to encrypt text file '%s'\n", input_filepath);
+  printf("Using key: '%s'\n", cipher_key);
+  printf("To encrypt text file '%s'\n", input_filepath);
 
-  // Open file
+  // 1. Open input file
   FILE *text_input_file = fopen(input_filepath, "r");
-  FILE *cipher_output_file = fopen(output_filepath, "w");
 
   if (text_input_file == NULL) {
     perror("Could not find file");
     exit(EXIT_FAILURE);
-  } 
-
-  // Get index shifts
-  const int cipher_length = get_string_length(cipher_key);
-  index_shift_node *head = get_head_index_shift_node(cipher_key, cipher_length);  
-  
-  index_shift_node* current = head;
-  int needs_padding = 0, skip = 0;
-  const int read_length = cipher_length + 1; // + 1 to shift '\0'
-
-  char *buffer, *encrypted_chars;
-  buffer = malloc(sizeof(char) * read_length);
-  encrypted_chars = malloc(sizeof(char) * read_length);  
-
-  while (fgets(buffer, read_length, text_input_file)) {
-    current = head;
-    while (current != NULL) {      
-      char character = buffer[current -> original_index];
-      if (character == '\0') needs_padding = 1;
-      if (character == '\n') {
-        fprintf(cipher_output_file, "%c", character);
-        skip = 1;
-        break;
-      }
-
-      encrypted_chars[current -> index] = needs_padding == 1 ? 'X' : character;
-      current = current -> next;
-    }
-
-    if (skip == 1) {
-      skip = 0;
-      memset(encrypted_chars, 0, read_length * (sizeof encrypted_chars[0])); // skipping line, so reset sorted buffer
-    } else {
-      for (int i = 0; i < cipher_length; i++) {
-        fprintf(cipher_output_file, "%c", encrypted_chars[i]);
-      }
-    }
-
-    needs_padding = 0;
   }
 
-  printf("Encryption complete, output file location: '%s'", output_filepath);
+  fseek(text_input_file, 0, SEEK_END);
+  long file_size = ftell(text_input_file);
+  fseek(text_input_file, 0, SEEK_SET); 
+  char *string = malloc(file_size + 1);
+  fread(string, 1, file_size, text_input_file);
 
-  int close_file = fclose(text_input_file);
-  int close_output_file = fclose(cipher_output_file);
+  fclose(text_input_file);
+
+  string[file_size] = '\0'; // Terminate string
+
+  // 2. Get shift indexes
+  int cipher_length = 8;
+  index_shift_node *head = get_head_index_shift_node(cipher_key, cipher_length);
+
+  // 3. Allocate memory buffers
+  char *buffer, *encrypted_chars;
+  buffer = malloc(sizeof(char) * (cipher_length + 1));
+  encrypted_chars = malloc(sizeof(char) * (cipher_length + 1)); 
+
+  // 4. Open output file
+  FILE *cipher_output_file = fopen(output_filepath, "w");
+
+  // 5. Iterate through each character, placing n (length of cipher) characters
+  // into buffer to be shifted for encryption
+  index_shift_node* current = head;
+  int character_count = 0, i = 0;
+  while (i < file_size - 1) {
+    // Every n characters - shift all characters to encryption indexes
+    if (character_count == cipher_length) { 
+      current = head;
+      while (current != NULL) {      
+        // This essentially swaps it's original index with it's encrypted index
+        char character = buffer[current -> original_index];
+        encrypted_chars[current -> index] = character;
+        current = current -> next;
+      }
+
+      for (int char_index = 0; char_index < cipher_length; char_index++) {
+        fprintf(cipher_output_file, "%c", encrypted_chars[char_index]);
+      }
+
+      character_count = 0;
+    }
+
+    buffer[character_count++] = string[i++];
+  }
+
+  // 6. Clear up any left over values in the buffer and pad them with 'X'
+  current = head;
+  while (current != NULL) {
+    // If the index is greater than the last read index, pad with 'X'
+    char character = current -> original_index > character_count - 1 ? 'X' : buffer[current -> original_index];
+    encrypted_chars[current -> index] = character;
+    current = current -> next;
+  }
+  
+  for (int char_index = 0; char_index < cipher_length; char_index++) {
+    fprintf(cipher_output_file, "%c", encrypted_chars[char_index]);
+  }
+
+  fclose(cipher_output_file);
+
+  printf("Encryption complete, output file location: '%s'", output_filepath);
 
   return 0;
 }
