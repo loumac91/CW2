@@ -13,4 +13,7 @@ public class Strings {
     // ERROR
     public static final String COULD_NOT_FIND_NAMES_FILE = "Could not read names.txt";
     public static final String COULD_NOT_WRTIE_SORTED_NAMES_FILE = "Error writing sorted names to output file";
+    
+    // SUCCESS
+    public static final String SORTED_NAMES_SUCCESS = "Names were successfully sorted to:";
 }

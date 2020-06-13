@@ -21,9 +21,7 @@ public class CW2Q1 {
   public static void main(String[] args) {
     
     printExampleFromSpecification();
-    writeSortedNamesToOutputFile();
-
-    printAlreadySorted();
+    writeSortedNamesToOutputFileAndPrint();
   }
 
   private static void printExampleFromSpecification() {
@@ -33,7 +31,7 @@ public class CW2Q1 {
     sortAndPrint(example);
   }
 
-  private static void writeSortedNamesToOutputFile() {
+  private static void writeSortedNamesToOutputFileAndPrint() {
 
     String[] unsortedNames = getUnsortedNames();
 
@@ -54,13 +52,9 @@ public class CW2Q1 {
     } catch (IOException ioException) {
       System.out.println(Strings.COULD_NOT_WRTIE_SORTED_NAMES_FILE);
     }
-  }
 
-  // This can be debugged to show that only 1 pass is made through the array
-  private static void printAlreadySorted() {
-    String[] s = new String[] { "Louis", "Michael", "Tom", "Wayne", "Zack" };
-
-    sortAndPrint(s);
+    System.out.println(Strings.SORTED_NAMES_SUCCESS);
+    System.out.println(Strings.SORTED_NAMES_FULL_FILEPATH);
   }
 
   private static void sortAndPrint(String[] array) {
