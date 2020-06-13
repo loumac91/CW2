@@ -14,6 +14,8 @@ int main() {
   // 2. Insert 8 pairs
   // (Note the first two will have the same hash) as the hashing function
   // sums the ASCI characters. So a collision is guaranteed here
+  printf("Inserting 8 items into hashtable...\n");
+
   insert(hash_table, "Hello", "World");
   insert(hash_table, "olleH", "World");
   insert(hash_table, "City", "Bristol");
@@ -68,12 +70,6 @@ int main() {
   // 7. Repeat search on deleted key to see no result
   char* result_three = search(hash_table, "Hello");
   printf("When searching for removed key 'Hello', 'null' should be returned. Returned value is: '%s'\n", result_three);
-
-
-  for (int i = 0; i < 1000; i++)
-  {
-    /* code */
-  }
   
 
   // 6. Delete table

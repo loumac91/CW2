@@ -29,3 +29,9 @@ java CW2Q4
 Q5: Compile and Run:
 gcc CW2Q5.c q5/cipher_transposition.c -o CW2Q5.exe 
 ./CW2Q5.exe
+
+---
+Clean up commands: 
+
+del /s *.class 
+del /s *.exe 
