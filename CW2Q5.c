@@ -64,7 +64,7 @@ int main(int argc, char const *argv[]) {
 
   // 3. Allocate memory buffers
   char *buffer, *encrypted_chars;
-  buffer = calloc((cipher_length + 1), sizeof(char)); // TODO:calloc?
+  buffer = calloc((cipher_length + 1), sizeof(char));
   encrypted_chars = calloc((cipher_length + 1), sizeof(char)); 
 
   // 4. Open output file

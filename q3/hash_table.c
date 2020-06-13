@@ -8,7 +8,8 @@
 // STATIC FUNCTIONS
 // These are internal to this file (can only be called from within file), hence static 
 
-// Double hashing method
+// Double hashing method of applying two hashes together
+// Collisions are mitigated by adding the attempt number onto the first hash
 static int get_hash_index(const char* key, const int hash_table_size, const int attempt) {
   int hashed_key = get_hashed_key(key);
   int hash_one = hashed_key % hash_table_size;
@@ -18,7 +19,7 @@ static int get_hash_index(const char* key, const int hash_table_size, const int 
 }
 
 static key_value_pair* create_key_value_pair(const char* key, const char* value) {
-  // Allocate memory for a key value pair pointer 
+  // Use of malloc here allows for use of free when we want to delete pointers
   key_value_pair* kvp = malloc(sizeof(key_value_pair));  
 
   // Set key and value pointers by duplicating key and value pointers
@@ -74,7 +75,6 @@ static void resize_hash_table(hash_table* ht, const double size_change) {
 // INSTANCE FUNCTIONS
 
 hash_table* create_hash_table(const int table_size) {
-  // Allocate memory for hash table pointer
   hash_table* ht = malloc(sizeof(hash_table));
 
   ht -> size = table_size;
@@ -142,10 +142,12 @@ void remove_key(hash_table* ht, const char* key) {
 
   int attempts = 1;
   while (current_kvp != NULL && current_kvp != &DELETED_KEY_VALUE_PAIR) {
+    // If key found, delete key value pair, replace index with null pair and 
+    // decrease hash table count
     if (string_compare(current_kvp -> key, key) == 0) {
       delete_key_value_pair(current_kvp);
       ht -> key_value_pairs[index] = &DELETED_KEY_VALUE_PAIR;
-      ht -> count--;
+      ht -> count--; 
       return;
     }
 
@@ -160,6 +162,7 @@ char* search(hash_table* ht, const char* key) {
 
   int attempts = 1;
   while (kvp != NULL && kvp != &DELETED_KEY_VALUE_PAIR) {
+    // If key found, return it's corresponding value
     if (string_compare(kvp -> key, key) == 0) {
       return kvp -> value;
     }
