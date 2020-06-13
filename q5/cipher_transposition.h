@@ -7,5 +7,3 @@ typedef struct node {
 // API Functions
 
 index_shift_node* get_head_index_shift_node(char cipher_key[], const int cipher_length);
-
-void encrypt_file();

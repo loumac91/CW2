@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-void swap(int *array_pointer, int swapIndex, int swapValue, int originIndex)
-{
+void swap(int *array_pointer, int swapIndex, int swapValue, int originIndex) {
   int temp = array_pointer[swapIndex];
   array_pointer[swapIndex] = swapValue;
   array_pointer[originIndex] = temp;
@@ -9,8 +8,7 @@ void swap(int *array_pointer, int swapIndex, int swapValue, int originIndex)
 
 // *array_pointer is equivalent to array[], can't pass array as value in C.
 // Length therefore must be provided as separate argument (unless it is specified explicitly e.g. array[5])
-void quick_sort(int *array_pointer, int length)
-{
+void quick_sort(int *array_pointer, int length) {
   // 1. Base case for recursion - return if nothing left to sort
   if (length <= 1) return;
 

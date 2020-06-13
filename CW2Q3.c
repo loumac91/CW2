@@ -12,8 +12,7 @@
 // Note: how you define the structures, functions, hashing algorithm and the limit (if any) of the number
 // of items that can be stored in the Hash Table etc. is up to you.
 
-int main() 
-{
+int main() {
   hash_table* hash_table = create_hash_table(1000);
   insert(hash_table, "wakanda", "forever");
   insert(hash_table, "hello", "world");

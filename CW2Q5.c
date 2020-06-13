@@ -118,7 +118,7 @@ int main(int argc, char const *argv[]) {
 
   fclose(cipher_output_file);
 
-  printf("Encryption complete, output file location: '%s'", output_filepath);
+  printf("Encryption complete, output file location: '%s'\n", output_filepath);
 
   return 0;
 }

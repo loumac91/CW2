@@ -57,7 +57,3 @@ index_shift_node* get_head_index_shift_node(char cipher_key[], const int cipher_
 
   return head;
 }
-
-void encrypt_file() {
-  
-}
