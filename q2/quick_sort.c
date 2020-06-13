@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-void swap(int *array_pointer, int swapIndex, int swapValue, int originIndex) {
+void swap(int *array_pointer, const int swapIndex, const int swapValue, const int originIndex) {
   int temp = array_pointer[swapIndex];
   array_pointer[swapIndex] = swapValue;
   array_pointer[originIndex] = temp;

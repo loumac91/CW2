@@ -4,7 +4,7 @@
 
 #include "cipher_transposition.h"
 
-static void push_to_head(index_shift_node **head, int original_index) {
+static void push_to_head(index_shift_node **head, const int original_index) {
   index_shift_node* new_head = (index_shift_node*)malloc(sizeof(index_shift_node));
   new_head -> original_index = original_index;
   new_head -> index = original_index;
@@ -13,7 +13,7 @@ static void push_to_head(index_shift_node **head, int original_index) {
   *head = new_head;
 }
 
-static void update_item(index_shift_node **head, int current_index, int new_index) {
+static void update_item(index_shift_node **head, const int current_index, const int new_index) {
   index_shift_node* current = *head;
   while (current != NULL) {
     if (current -> index == current_index) {
@@ -26,7 +26,6 @@ static void update_item(index_shift_node **head, int current_index, int new_inde
 }
 
 index_shift_node* get_head_index_shift_node(char cipher_key[], const int cipher_length) {
-
   index_shift_node *head = NULL;
   for (int i = 0; i < cipher_length; i++) {
     push_to_head(&head, i);

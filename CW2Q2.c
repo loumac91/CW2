@@ -4,7 +4,7 @@
 
 #include "q2/quick_sort.h"
 
-void print_array(char *print_statement, int *array_pointer, int length) {
+void print_array(char *print_statement, int *array_pointer, const int length) {
   printf("%s \n", print_statement);
 
   for (int i = 0; i < length; i++)
@@ -15,7 +15,7 @@ void print_array(char *print_statement, int *array_pointer, int length) {
   printf("\n");
 }
 
-void sort_and_print_array(int *array_pointer, int length) {
+void sort_and_print_array(int *array_pointer, const int length) {
   print_array("Before sorting:", array_pointer, length);
 
   quick_sort(array_pointer, length);

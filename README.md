@@ -15,7 +15,7 @@ gcc CW2Q2.c ./q2/quick_sort.c -o CW2Q2.exe
 ---
 
 Q3: Compile and Run:
-gcc CW2Q3.c ./q3/hash_table.c ./q3/hashing.c -o CW2Q2.exe
+gcc CW2Q3.c ./q3/hash_table.c ./q3/hashing.c ./q3/string_utils.c -o CW2Q3.exe
 ./CW2Q3.exe
 
 ---
@@ -27,4 +27,4 @@ java CW2Q4
 ---
 
 Q5: Compile and Run:
-gcc CW2Q5.c q5/cipher_transposition.c -o main.exe
+gcc CW2Q5.c q5/cipher_transposition.c -o CW2Q5.exe

@@ -1,2 +1,2 @@
 
-int get_hash_key(const char* key);
+int get_hashed_key(const char* key);

@@ -3,13 +3,6 @@
 
 #include "q5/cipher_transposition.h"
 
-// Alternative to strlen
-static int get_string_length(char* s) {
-  int i = 0;
-  while (*(s++)) i++; // This iterates up until '\0' (NULL character) is found
-  return i;
-}
-
 // Q5. Implement a Columnar Transposition Cipher in C to encrpyt a message
 // of any length. A Columnar Transposition Cipher is transposition cipher that
 // follows a simple rule for mixing up the characters in the plaintext to form 
@@ -40,7 +33,6 @@ static int get_string_length(char* s) {
 // by simply shifting the indexes of the file back into their correct position
 
 int main(int argc, char const *argv[]) {
-
   char cipher_key[] = "LOVELACE";
   const char* input_filepath = "./q5/text.txt";
   const char* output_filepath = "./q5/output.txt";
@@ -72,8 +64,8 @@ int main(int argc, char const *argv[]) {
 
   // 3. Allocate memory buffers
   char *buffer, *encrypted_chars;
-  buffer = malloc(sizeof(char) * (cipher_length + 1));
-  encrypted_chars = malloc(sizeof(char) * (cipher_length + 1)); 
+  buffer = calloc((cipher_length + 1), sizeof(char)); // TODO:calloc?
+  encrypted_chars = calloc((cipher_length + 1), sizeof(char)); 
 
   // 4. Open output file
   FILE *cipher_output_file = fopen(output_filepath, "w");

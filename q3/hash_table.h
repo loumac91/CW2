@@ -1,4 +1,7 @@
-// can use struct instead?
+// Magic numbers
+#define PRIME 151
+#define SIZE_INCREASE 2.5
+#define SIZE_DECREASE 0.5
 
 typedef struct {
   char* key;
