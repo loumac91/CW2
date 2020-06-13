@@ -15,6 +15,10 @@ import q4.util.StringBuilderUtils;
 
 public class TextRedactionReader {
   
+  // The idea with this approach is to get everything we need in one pass through the file - to be as efficient as possible
+  // Also utilise hash maps and sets to be able to efficiently search for words that are captured to determine whether they
+  // should be redacted or not
+
   public RedactionReadResult readRedactions(String inputAbsolutePath) throws FileNotFoundException, IOException {
 
     HashSet<String> uniqueLowerCaseWords = new HashSet<String>();

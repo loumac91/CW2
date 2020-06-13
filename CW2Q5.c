@@ -59,6 +59,8 @@ int main(int argc, char const *argv[]) {
   string[file_size] = '\0'; // Terminate string
 
   // 2. Get shift indexes
+  // The main idea with this is to only calculate shifting once and apply it 
+  // repeatedly after, as opposed to repeatedly calulcating and shifting
   int cipher_length = 8;
   index_shift_node *head = get_head_index_shift_node(cipher_key, cipher_length);
 

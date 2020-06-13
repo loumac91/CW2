@@ -4,6 +4,9 @@ import java.nio.file.FileSystems;
 
 public class Strings {
 
+    public static final String BEFORE_SORTING = "Before sorting:";
+    public static final String AFTER_SORTING = "After sorting:";
+
     // FILES
     public static final String FILE_SEPARATOR = FileSystems.getDefault().getSeparator();
     public static final String USER_DIRECTORY = System.getProperty("user.dir");
@@ -16,4 +19,8 @@ public class Strings {
     
     // SUCCESS
     public static final String SORTED_NAMES_SUCCESS = "Names were successfully sorted to:";
+
+    // FORMAT
+    public static final String SORTING_TIME_FORMAT = "Sorting time was: %s seconds";
+    public static final String NAME_SEPARATOR_FORMAT = "%s, ";
 }

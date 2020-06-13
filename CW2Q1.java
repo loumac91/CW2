@@ -5,6 +5,8 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -37,8 +39,10 @@ public class CW2Q1 {
 
     if (unsortedNames.length == 0) return;
     
+    Instant sortBeginTime = Instant.now();
     String[] sortedNames = BubbleSort.sort(unsortedNames);
-    
+    Duration sortTime = Duration.between(sortBeginTime, Instant.now());
+
     try {
       File outputFile = new File(Strings.SORTED_NAMES_FULL_FILEPATH);
       OutputStream outputStream = new FileOutputStream(outputFile);
@@ -55,15 +59,19 @@ public class CW2Q1 {
 
     System.out.println(Strings.SORTED_NAMES_SUCCESS);
     System.out.println(Strings.SORTED_NAMES_FULL_FILEPATH);
+    System.out.println();
+
+    Double timeInSeconds = sortTime.toMillis() / 1000.0;
+    System.out.println(String.format(Strings.SORTING_TIME_FORMAT, timeInSeconds));
   }
 
   private static void sortAndPrint(String[] array) {
 
-    printArray("Before sorting:", array);
+    printArray(Strings.BEFORE_SORTING, array);
 
     String[] result = BubbleSort.sort(array);
 
-    printArray("After sorting:", result);
+    printArray(Strings.AFTER_SORTING, result);
   }
 
   private static void printArray(String printStatement, String[] array) {
@@ -71,7 +79,7 @@ public class CW2Q1 {
     System.out.println(printStatement);
 
     for (int i = 0; i < array.length; i++) {
-      System.out.print(i == array.length - 1 ? array[i] : String.format("%s, ", array[i]));
+      System.out.print(i == array.length - 1 ? array[i] : String.format(Strings.NAME_SEPARATOR_FORMAT, array[i]));
     }
 
     System.out.println();

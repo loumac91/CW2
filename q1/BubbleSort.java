@@ -23,7 +23,7 @@ public class BubbleSort {
   // Each iteration compares every value in the String array left to right - to determine whether it should "bubble" up to next index
   // As i increments, it is used to "pad" the right hand side of the array as we no longer need to evaluate those elements as they are in their sorted state
   // This is so say that each time i increments - and swapped = true - then a value reached its final sorted index
-  // If sorted = false, no swaps occured and the array is in its sorted state
+  // If swapped = false, no swaps occured and the array is in its sorted state
   // This optimisation helps prevent unnecessary iteration
 
   private static String[] sort(String[] array, SwapBase swapper) {
