@@ -1,32 +1,33 @@
 // Magic numbers
-#define PRIME 151
+#define PRIME 787
 #define SIZE_INCREASE 2.5
 #define SIZE_DECREASE 0.5
+#define SIZE_INCREASE_THRESHOLD 80
+#define SIZE_DECREASE_THRESHOLD 20
 
 typedef struct {
   char* key;
-  char* value;
-} key_value_pair;
+} hash_table_item;
 
 typedef struct {
   int size;
   int count;
-  key_value_pair** key_value_pairs;
+  hash_table_item** hash_table_items;
 } hash_table;
 
-// Definition for what a deleted key value pair will look like
-static key_value_pair DELETED_KEY_VALUE_PAIR = { NULL, NULL };
+// Definition for what a deleted key will look like
+static hash_table_item DELETE_HASH_TABLE_ITEM = { NULL };
 
 // Instance functions
 
 hash_table* create_hash_table(const int table_size);
 
-void delete_hash_table(hash_table* ht);
+void delete_hash_table(hash_table* hash_table);
 
-// API Functions
+// API Functions - key is synonymous with name here
 
-void insert(hash_table* ht, const char* key, const char* value);
+void insert(hash_table* hash_table, const char* key);
 
-void remove_key(hash_table* ht, const char* key); // This was renamed as delete and remove are reserved
+void remove_key(hash_table* hash_table, const char* key); // This was renamed as delete and remove are reserved
 
-char* search(hash_table* ht, const char* key);
+int search(hash_table* hash_table, const char* key); // Treating int like a bit (i.e. 0 (false) or 1 (true)

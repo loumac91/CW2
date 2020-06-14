@@ -48,6 +48,7 @@ int main(int argc, char const *argv[]) {
     exit(EXIT_FAILURE);
   }
 
+  // 2. Read its entire contents to a string;
   fseek(text_input_file, 0, SEEK_END);
   long file_size = ftell(text_input_file);
   fseek(text_input_file, 0, SEEK_SET); 
@@ -58,21 +59,22 @@ int main(int argc, char const *argv[]) {
 
   string[file_size] = '\0'; // Terminate string
 
-  // 2. Get shift indexes
+  // 3. Get shift indexes
   // The main idea with this is to only calculate shifting once and apply it 
   // repeatedly after, as opposed to repeatedly calulcating and shifting
   int cipher_length = 8;
   index_shift_node *head = get_head_index_shift_node(cipher_key, cipher_length);
 
-  // 3. Allocate memory buffers
+  // 4. Allocate memory buffers
+  const int buffer_length = cipher_length + 1; // + 1 to accommodate '\0'
   char *buffer, *encrypted_chars;
-  buffer = calloc((cipher_length + 1), sizeof(char));
-  encrypted_chars = calloc((cipher_length + 1), sizeof(char)); 
+  buffer = calloc(buffer_length, sizeof(char));
+  encrypted_chars = calloc(buffer_length, sizeof(char)); 
 
-  // 4. Open output file
+  // 5. Open output file
   FILE *cipher_output_file = fopen(output_filepath, "w");
 
-  // 5. Iterate through each character, placing n (length of cipher) characters
+  // 6. Iterate through each character, placing n (length of cipher) characters
   // into buffer to be shifted for encryption
   index_shift_node* current = head;
   int character_count = 0, i = 0;
@@ -97,7 +99,7 @@ int main(int argc, char const *argv[]) {
     buffer[character_count++] = string[i++];
   }
 
-  // 6. Clear up any left over values in the buffer and pad them with 'X'
+  // 7. Clear up any left over values in the buffer and pad them with 'X'
   current = head;
   while (current != NULL) {
     // If the index is greater than the last read index, pad with 'X'
@@ -110,6 +112,7 @@ int main(int argc, char const *argv[]) {
     fprintf(cipher_output_file, "%c", encrypted_chars[char_index]);
   }
 
+  // 8. Close file
   fclose(cipher_output_file);
 
   printf("Encryption complete, output file location: '%s'\n", output_filepath);

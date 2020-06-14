@@ -18,21 +18,19 @@ static int get_hash_index(const char* key, const int hash_table_size, const int 
   return index;
 }
 
-static key_value_pair* create_key_value_pair(const char* key, const char* value) {
+static hash_table_item* create_hash_table_item(const char* key) {
   // Use of malloc here allows for use of free when we want to delete pointers
-  key_value_pair* kvp = malloc(sizeof(key_value_pair));  
+  hash_table_item* hash_table_item = malloc(sizeof(hash_table_item));  
 
   // Set key and value pointers by duplicating key and value pointers
-  kvp -> key = strdup(key); // strdup does malloc + strcpy under the hood
-  kvp -> value = strdup(value);
+  hash_table_item -> key = strdup(key); // strdup does malloc + strcpy under the hood
   
-  return kvp;
+  return hash_table_item;
 }
 
-static void delete_key_value_pair(key_value_pair* kvp) {
-  free(kvp -> key);
-  free(kvp -> value);
-  free(kvp);
+static void delete_hash_table_item(hash_table_item* hash_table_item) {
+  free(hash_table_item -> key);
+  free(hash_table_item);
 }
 
 static int get_load_factor(hash_table* ht) {
@@ -45,13 +43,13 @@ static void resize_hash_table(hash_table* ht, const double size_change) {
     return;
   }
 
-  // Copy across all existing values into new temporary table
+  // Copy across all existing keys into new temporary table
   hash_table* temp_hash_table = create_hash_table(new_size);
   for (int i = 0; i < ht -> size; i++) {
-    key_value_pair* kvp = ht -> key_value_pairs[i];
-    if (kvp != NULL && kvp != &DELETED_KEY_VALUE_PAIR) {
-      // This reindexes the key value pairs
-      insert(temp_hash_table, kvp -> key, kvp -> value);
+    hash_table_item* hash_table_item = ht -> hash_table_items[i];
+    if (hash_table_item != NULL && hash_table_item != &DELETE_HASH_TABLE_ITEM) {
+      // This reindexes the keys in the table
+      insert(temp_hash_table, hash_table_item -> key);
     }
   }
 
@@ -63,10 +61,10 @@ static void resize_hash_table(hash_table* ht, const double size_change) {
   ht -> size = temp_hash_table -> size;
   temp_hash_table -> size = temp_size;
 
-  // Swap in the new items
-  key_value_pair** temp_key_value_pairs = ht -> key_value_pairs;
-  ht -> key_value_pairs = temp_hash_table -> key_value_pairs;
-  temp_hash_table -> key_value_pairs = temp_key_value_pairs;
+  // Swap in the new keys
+  hash_table_item** temp_hash_table_items = ht -> hash_table_items;
+  ht -> hash_table_items = temp_hash_table -> hash_table_items;
+  temp_hash_table -> hash_table_items = temp_hash_table_items;
 
   // Delete temporary table
   delete_hash_table(temp_hash_table);
@@ -79,22 +77,22 @@ hash_table* create_hash_table(const int table_size) {
 
   ht -> size = table_size;
   ht -> count = 0;
-  // Set kvp array to be (table_size) elements long with each element being key_value_pair* bytes in size
+  // Set hash_items "array" to be (table_size) elements long with each element being hash_table_item* bytes in size
   // the cast to size_t in order to mimic call of sizeof function (which has a return type of size_t)
-  ht -> key_value_pairs = calloc((size_t)ht -> size, sizeof(key_value_pair*));
+  ht -> hash_table_items = calloc((size_t)ht -> size, sizeof(hash_table_item*));
 
   return ht;
 }
 
 void delete_hash_table(hash_table* ht) {
   for (int i = 0; i < ht -> size; i++) {
-    key_value_pair* kvp = ht -> key_value_pairs[i];
-    if (kvp != NULL && kvp != &DELETED_KEY_VALUE_PAIR) { // & is the Address operator
-      delete_key_value_pair(kvp);
+    hash_table_item* hash_table_item = ht -> hash_table_items[i];
+    if (hash_table_item != NULL && hash_table_item != &DELETE_HASH_TABLE_ITEM) { // & is the Address operator
+      delete_hash_table_item(hash_table_item);
     }
   }
 
-  free(ht -> key_value_pairs);
+  free(ht -> hash_table_items);
   free(ht);
 }
 
@@ -102,74 +100,75 @@ void delete_hash_table(hash_table* ht) {
 // For example, insert probes until it can find either an empty index
 // or an index with the same key to insert/update
 
-void insert(hash_table* ht, const char* key, const char* value) {
-  if (get_load_factor(ht) >= 80) {
+void insert(hash_table* ht, const char* key) {
+  if (get_load_factor(ht) >= SIZE_INCREASE_THRESHOLD) {
     resize_hash_table(ht, SIZE_INCREASE);
   }
 
-  key_value_pair* kvp = create_key_value_pair(key, value);
+  hash_table_item* ht_item = create_hash_table_item(key); // Have to abbreviate to avoid conflicts
 
-  int index = get_hash_index(kvp -> key, ht -> size, 0);
+  int index = get_hash_index(ht_item -> key, ht -> size, 0);
   
-  key_value_pair* current_kvp = ht -> key_value_pairs[index];
+  hash_table_item* current_hash_table_item = ht -> hash_table_items[index];
 
-  // Handle collisions
+  // Probing strategy to handle collisions
   int attemtpts = 1;
-  while (current_kvp != NULL && current_kvp != &DELETED_KEY_VALUE_PAIR) {
+
+  while (current_hash_table_item != NULL && current_hash_table_item != &DELETE_HASH_TABLE_ITEM) {
     // If it exists, insert over the top
-    if (string_compare(current_kvp -> key, key) == 0) {
-      delete_key_value_pair(current_kvp);
-      ht -> key_value_pairs[index] = kvp;
+    if (string_compare(current_hash_table_item -> key, key) == 0) {
+      delete_hash_table_item(current_hash_table_item);
+      ht -> hash_table_items[index] = ht_item;
       return;
     }
 
-    index = get_hash_index(kvp -> key, ht -> size, attemtpts++);
-    current_kvp = ht -> key_value_pairs[index];
+    index = get_hash_index(ht_item -> key, ht -> size, attemtpts++);
+    current_hash_table_item = ht -> hash_table_items[index];
   }
 
   // Add it to free index if not previously existing
-  ht -> key_value_pairs[index] = kvp;
+  ht -> hash_table_items[index] = ht_item;
   ht -> count++;
 }
 
 void remove_key(hash_table* ht, const char* key) {
-  if (get_load_factor(ht) <= 20) {
+  if (get_load_factor(ht) <= SIZE_DECREASE_THRESHOLD) {
     resize_hash_table(ht, SIZE_DECREASE);
   }
 
   int index = get_hash_index(key, ht -> size, 0);
-  key_value_pair* current_kvp = ht -> key_value_pairs[index];
+  hash_table_item* current_hash_table_item = ht -> hash_table_items[index];
 
   int attempts = 1;
-  while (current_kvp != NULL && current_kvp != &DELETED_KEY_VALUE_PAIR) {
-    // If key found, delete key value pair, replace index with null pair and 
+  while (current_hash_table_item != NULL && current_hash_table_item != &DELETE_HASH_TABLE_ITEM) {
+    // If key found, delete key, replace index with null key items and 
     // decrease hash table count
-    if (string_compare(current_kvp -> key, key) == 0) {
-      delete_key_value_pair(current_kvp);
-      ht -> key_value_pairs[index] = &DELETED_KEY_VALUE_PAIR;
+    if (string_compare(current_hash_table_item -> key, key) == 0) {
+      delete_hash_table_item(current_hash_table_item);
+      ht -> hash_table_items[index] = &DELETE_HASH_TABLE_ITEM;
       ht -> count--; 
       return;
     }
 
     index = get_hash_index(key, ht -> size, attempts++);
-    current_kvp = ht -> key_value_pairs[index];
+    current_hash_table_item = ht -> hash_table_items[index];
   }
 }
 
-char* search(hash_table* ht, const char* key) {
+int search(hash_table* ht, const char* key) {
   int index = get_hash_index(key, ht -> size, 0);
-  key_value_pair* kvp = ht -> key_value_pairs[index];
+  hash_table_item* hash_table_item = ht -> hash_table_items[index];
 
   int attempts = 1;
-  while (kvp != NULL && kvp != &DELETED_KEY_VALUE_PAIR) {
-    // If key found, return it's corresponding value
-    if (string_compare(kvp -> key, key) == 0) {
-      return kvp -> value;
+  while (hash_table_item != NULL && hash_table_item != &DELETE_HASH_TABLE_ITEM) {
+    // If key found, return 1 (equivalent to boolean)
+    if (string_compare(hash_table_item -> key, key) == 0) {
+      return 1;
     }
 
     index = get_hash_index(key, ht -> size, attempts++);
-    kvp = ht -> key_value_pairs[index];
+    hash_table_item = ht -> hash_table_items[index];
   }
 
-  return NULL;
+  return 0;
 }
